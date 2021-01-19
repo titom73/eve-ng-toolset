@@ -27,9 +27,45 @@ from datetime import datetime
 
 import requests
 from prettytable import PrettyTable
+from jinja2 import Template
+
+ITERM2_PATH = 'Library/Application Support/iTerm2/DynamicProfiles'
+ITERM2_PROFILE ='''
+{
+  "Profiles": [
+    {% for node in nodes %}
+    {
+      "Name" : "{{ node[0] }}",
+      "Tags" : ["{{ lab }}-{{ node[1] }}"],
+      "Initial Text" : "telnet {{ eve }} {{ node[2] }}",
+      "Guid": "{{ node[3] }}"
+    },
+    {%- endfor %}
+  ]
+}
+'''
 
 
-# ITERM2 = 'Library/Application Support/iTerm2/DynamicProfiles'
+def iterm_profile(lab_json):
+    nodelist = []
+    for node in nodes['data'].keys():
+        # running nodes only
+        if lab_json['data'][node]['url'].split(':')[2] != '0':
+            name = lab_json['data'][node]['name']               # node name
+            # template: xrv, vios, etc
+            type = lab_json['data'][node]['template']
+            tport = lab_json['data'][node]['url'].split(':')[2]  # dynamic telnet port
+            uuid = lab_json['data'][node]['uuid']               # node uuid
+            nodelist.append((name, type, tport, uuid))
+
+    template = Template(ITERM2_PROFILE)
+    profile_name = args.lab.split('/')[-1]
+    render = template.render(nodes=sorted(
+        nodelist), lab=profile_name, eve=args.server)
+    rfile = f'{os.path.expanduser("~")}/{ITERM2_PATH}/{profile_name}.json'
+    print('Create iTerm2 dynamic profile at {}'.format(rfile))
+    with open(rfile, 'w') as f:
+        f.write(render)
 
 
 def api_login(username, password, ip, ssl_check=False):
@@ -104,6 +140,8 @@ if __name__ == '__main__':
         '--lab', '-l', help='LAB name without extension running on EVE-NG', default='password')
     parser.add_argument(
         '--connect', '-c', help='Connect to node', default='unset')
+    parser.add_argument(
+        '--iterm', help='Generate iTerm2 profile', action="store_true", default=False)
     args = parser.parse_args()
 
     args.password = os.getenv('EVE_PASSWORD', args.password)
@@ -123,6 +161,8 @@ if __name__ == '__main__':
                       time_stamp=time_stamp, cookie=cookie)
     if args.connect != 'unset':
         connect_node(nodes, args.connect)
+    elif args.iterm:
+        iterm_profile(lab_json=nodes)
     else:
         table = list_topology_nodes(nodes)
         print(table)

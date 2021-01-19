@@ -41,7 +41,7 @@ $ python bin/eve-node-connector -h
 $ export EVE_PASSWORD=<my_eve_password>
 
 # Run script with saved EVE_PASSWORD
-$ python bin/eve-topo.py -s < eve-ng -instance > -u < username > -l '/Users/Customers/Lab Topology - EOS EVPN'
+$ eve-node-connector -s < eve-ng -instance > -u < username > -l '/Users/Customers/Lab Topology - EOS EVPN'
 
 +-------------------------------+--------------------+-------+-------------+
 |            Topology           |     Node Name      |  Type | Telnet Port |
@@ -53,6 +53,18 @@ $ python bin/eve-topo.py -s < eve-ng -instance > -u < username > -l '/Users/Cust
 +-------------------------------+--------------------+-------+-------------+
 ```
 
+### Create a dynamic iTerm2 profile
+
+```bash
+# Set password to not use --password trigger
+$ export EVE_PASSWORD=<my_eve_password>
+
+# Run script with saved EVE_PASSWORD
+$ eve-node-connector -s < eve-ng -instance > -u < username > -l '/Users/Customers/Lab Topology - EOS EVPN' --iterm
+Getting information from < eve-ng -instance >
+Create iTerm2 dynamic profile at /Users/< username >/Library/Application Support/iTerm2/DynamicProfiles/Lab Topology - EOS EVPN.json
+```
+
 ### Connect to a node
 
 ```bash
@@ -60,7 +72,7 @@ $ python bin/eve-topo.py -s < eve-ng -instance > -u < username > -l '/Users/Cust
 $ export EVE_PASSWORD=<my_eve_password>
 
 # Run script with saved EVE_PASSWORD
-$ python bin/eve-topo.py -s < eve-ng -instance > -u < username > -l '/Users/Customers/Lab Topology - EOS EVPN' -c spine-01
+$ eve-node-connector -s < eve-ng -instance > -u < username > -l '/Users/Customers/Lab Topology - EOS EVPN' -c spine-01
 ```
 
 ## Additional resources
