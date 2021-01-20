@@ -16,6 +16,9 @@ Script repo to play with EVE-NG lab solution
 
 ```shell
 $ pip install git+https://github.com/titom73/eve-ng-toolset
+
+# Run script
+$ eve-nodes-connector -h
 ```
 
 ### GIT process
@@ -29,10 +32,19 @@ $ cd eve-ng-toolset
 $ pip install -r requirements.txt
 
 # Run script
-$ python bin/eve-node-connector -h
+$ python bin/eve-nodes-connector -h
 ```
 
 ## Usage
+
+### Options
+
+Script can load information from SHELL environment variables
+
+- __EVE_USERNAME__: replace usage of `--username`
+- __EVE_PASSWORD__: replace usage of `--password`
+- __EVE_SERVER__: replace usage of `--server`
+- __EVE_LAB__: replace usage of `--lab`
 
 ### List Nodes with their telnet port
 
