@@ -141,7 +141,6 @@ if __name__ == '__main__':
     nodes = eveSrv.get_project_nodes(project_path=args.lab)
     if nodes is None:
         sys.exit(1)
-
     if args.connect != 'unset':
         connect_node(nodes, args.connect)
     elif args.iterm:
@@ -149,5 +148,4 @@ if __name__ == '__main__':
     else:
         table = list_topology_nodes(nodes)
         print(table)
-
     sys.exit(0)

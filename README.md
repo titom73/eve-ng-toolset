@@ -6,9 +6,11 @@ Script repo to play with EVE-NG lab solution
 
 ## Scripts
 
-- __eve-node-connector__:
-  - List running nodes for a given topology and list dynamic telnet port.
-  - Allow to start a telnet connection to a node
+- [__`eve-nodes-connector`__](./bin/eve-lab-manager): Manage management connection to running nodes:
+  - list telnet ports,
+  - connect to a host,
+  - create iTerm2 profile
+- [__`eve-lab-manager`__](./bin/eve-lab-manager): Support basic lab operations like *start*, *stop*, *export*, *wipe*
 
 ## Installation
 
@@ -85,6 +87,20 @@ $ export EVE_PASSWORD=<my_eve_password>
 
 # Run script with saved EVE_PASSWORD
 $ eve-node-connector -s < eve-ng -instance > -u < username > -l '/Users/Customers/Lab Topology - EOS EVPN' -c spine-01
+```
+
+### Export configuration to EVE-NG
+
+```bash
+$ eve-lab-manager --export
++--------------------+--------+---------+
+|     Node Name      | Action |  Result |
++--------------------+--------+---------+
+|     spine-01       | export | success |
+|     spine-02       | export | success |
+|     leaf-01        | export | success |
+|     leaf-02        | export | success |
++--------------------+--------+---------+
 ```
 
 ## Additional resources

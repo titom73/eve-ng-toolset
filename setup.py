@@ -15,7 +15,7 @@ setup(
     version="0.0.2",
     python_requires=">=3.6",
     packages=['inetsixEve'],
-    scripts=["bin/eve-nodes-connector"],
+    scripts=["bin/eve-nodes-connector", "bin/eve-lab-manager"],
     install_requires=required,
     include_package_data=True,
     url="https://github.com/titom73/eve-ng-toolset",
