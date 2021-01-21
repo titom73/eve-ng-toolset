@@ -3,6 +3,7 @@
 
 import shutil
 from setuptools import setup
+import inetsixEve
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -12,7 +13,7 @@ with open('requirements.txt') as f:
 
 setup(
     name="EVE-NG toolset",
-    version="0.0.2",
+    version="{}".format(inetsixEve.__version__),
     python_requires=">=3.6",
     packages=['inetsixEve'],
     scripts=["bin/eve-nodes-connector", "bin/eve-lab-manager"],
@@ -20,7 +21,7 @@ setup(
     include_package_data=True,
     url="https://github.com/titom73/eve-ng-toolset",
     license="APACHE",
-    author="Thomas Grimonet",
-    author_email="tom@inetsix.net",
+    author="{}".format(inetsixEve.__author__),
+    author_email="{}".format(inetsixEve.__email__),
     description=long_description,
 )

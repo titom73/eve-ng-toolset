@@ -24,16 +24,42 @@ import urllib
 from datetime import datetime
 from loguru import logger
 
+
 __version__ = '0.0.2'
-__author__ = 'titom73'
+__author__ = '@titom73'
+__email__ = 'tom@inetsix.net'
+
 
 @logger.catch
 class EveApi():
+    """
+    EveApi Class to manage EVE-NG API calls
+
+    Generic class to support basic API operations for EVE-NG:
+    """
 
     EVE_ENDPOINTS = dict()
     EVE_ENDPOINTS['login'] = 'api/auth/login'
 
     def __init__(self, server, username='admin', password='password', proto='https', ssl_check=False):
+        """
+        __init__ Class constructor for EveApi
+
+        Create a new instance of EveApi
+
+        Parameters
+        ----------
+        server : str
+            Hostname or IP address of EVE-NG server
+        username : str, optional
+            Username to use to connect to EVE-NG, by default 'admin'
+        password : str, optional
+            Password to use to connect to EVE-NG, by default 'password'
+        proto : str, optional
+            protocol to use to connect to EVE-NG. Can be either http or https, by default 'https'
+        ssl_check : bool, optional
+            Enable or disable SSL verification, by default False
+        """
         self._user = username
         self._password = password
         self._server = server
@@ -43,6 +69,14 @@ class EveApi():
         self._cookies = self._login()
 
     def _login(self):
+        """
+        _login Do API call to authenticate user against EVE-NG isntance
+
+        Returns
+        -------
+        str
+            Cookie session
+        """
         data = {"username": self._user, "password": self._password, "html5": "-1"}
         url = self._proto + '://' + self._server + \
             '/' + self.EVE_ENDPOINTS['login']
@@ -54,6 +88,21 @@ class EveApi():
             return None
 
     def _get(self, uri):
+        """
+        _get Do an HTTP GET call against EVE-NG
+
+        Build context to do an HTTP GET call and retrieve data
+
+        Parameters
+        ----------
+        uri : str
+            API path to use after api/
+
+        Returns
+        -------
+        dict
+            JSON payload of the response
+        """
         headers = {'Accept': 'application/json'}
         now = datetime.now()
         time_stamp = int(datetime.timestamp(now) * 1000)
@@ -70,6 +119,21 @@ class EveApi():
             return None
 
     def _put(self, uri):
+        """
+        _put Do an HTTP PUT call against EVE-NG
+
+        Build context to do an HTTP PUT call and retrieve data
+
+        Parameters
+        ----------
+        uri : str
+            API path to use after api/
+
+        Returns
+        -------
+        dict
+            JSON payload of the response
+        """
         headers = {'Accept': 'application/json'}
         now = datetime.now()
         time_stamp = int(datetime.timestamp(now) * 1000)
@@ -86,13 +150,64 @@ class EveApi():
             return None
 
     def get_project_nodes(self, project_path):
+        """
+        get_project_nodes Get data related to a project on EVE-NG
+
+        From a given project with its path, function get data from EVE-NG
+
+        Parameters
+        ----------
+        project_path : str
+            Project Path as shown in admin page or project browser
+
+        Returns
+        -------
+        dict
+            JSON content sent by EVE-NG
+        """
         eve_lab = f'labs/{project_path}.unl/nodes'
         return self._get(uri=eve_lab)
 
     def get_api_data(self, uri):
+        """
+        get_api_data Generic function to get data -- DEBUG ONLY
+
+        Parameters
+        ----------
+        uri : str
+            API path to gets
+
+        Returns
+        -------
+        dict
+            JSON content sent by EVE-NG
+        """
         return self._get(uri=uri)
 
     def lab_action(self, project_path, action, api_type='get'):
+        """
+        lab_action Wrapper to execute Lab commands
+
+        Function to run actions on any lab:
+        - start all nodes
+        - stop all nodes
+        - export (configuration in EVE-NG)
+        - wipe nodes
+
+        Parameters
+        ----------
+        project_path : str
+            Project Path as shown in admin page or project browser
+        action : str
+            Any type of actions supported by lab
+        api_type : str, optional
+            type of API call to use to execute command. Can be either 'put' or 'get', by default 'get'
+
+        Returns
+        -------
+        dict
+            Dictionary with API content
+        """
         logger.debug('Run {} command for {}'.format(action, project_path))
         project_path = urllib.parse.quote(project_path)
         nodes = self.get_project_nodes(project_path=project_path)
@@ -109,8 +224,3 @@ class EveApi():
                 result = self._put(uri=eve_lab)
             results[nodes['data'][node]['name']] = result
         return results
-
-    def lab_topology(self, project_path):
-        logger.debug('Run topology command for {}'.format(project_path))
-        eve_lab = f'labs/{project_path}.unl/topology'
-        return self._query(uri=eve_lab)

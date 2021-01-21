@@ -28,6 +28,9 @@ from loguru import logger
 
 from inetsixEve import EveApi
 
+"""
+    Python EVE-NG Lab manager - CLI tool to start/stop/save/wipe lab on EVE-NG platform
+"""
 
 if __name__ == '__main__':
 

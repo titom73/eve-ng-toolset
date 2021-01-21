@@ -19,11 +19,9 @@
 from __future__ import absolute_import, division, print_function
 
 import argparse
-import json
 import os
 import subprocess
 import sys
-from datetime import datetime
 
 import requests
 from prettytable import PrettyTable
@@ -32,8 +30,10 @@ from loguru import logger
 
 from inetsixEve import EveApi
 
-__version__ = '0.0.2'
-__author__ = 'titom73'
+"""
+    Python EVE-NG Nodes Connector - CLI tool to list/connect on running nodes on lab on EVE-NG platform
+"""
+
 
 ITERM2_PATH = 'Library/Application Support/iTerm2/DynamicProfiles'
 ITERM2_PROFILE ='''
@@ -53,6 +53,14 @@ ITERM2_PROFILE ='''
 
 
 def iterm_profile(lab_json):
+    """
+    iterm_profile Create an iTerm2 dynamic profile to connect to any nodes running in topology
+
+    Parameters
+    ----------
+    lab_json : dict
+        List of nodes returns by EVE-NG API
+    """
     nodelist = []
     for node in nodes['data'].keys():
         # running nodes only
@@ -75,6 +83,24 @@ def iterm_profile(lab_json):
 
 
 def list_topology_nodes(lab_json):
+    """
+    list_topology_nodes Create a table of all nodes available in EVE-NG lab
+
+    Extract following elements from all nodes and returns a table
+    - Name
+    - Template
+    - Dynamic telnet port
+
+    Parameters
+    ----------
+    lab_json : dict
+        List of nodes returns by EVE-NG API
+
+    Returns
+    -------
+    string
+        A table of all nodes
+    """
     nodelist = []
     for node in lab_json['data'].keys():
         if lab_json['data'][node]['url'].split(':')[2] != '0':
@@ -92,6 +118,24 @@ def list_topology_nodes(lab_json):
 
 
 def connect_node(lab_json, node_search):
+    """
+    connect_node Start a telnet connection to given node name
+
+    Read EVE-NG data to get telnet port for the given host and
+    start a new telnet process
+
+    Parameters
+    ----------
+    lab_json : dict
+        List of nodes returns by EVE-NG API
+    node_search : string
+        Name of the node to use to open connection
+
+    Returns
+    -------
+    boolean
+        Always True
+    """
     for node in lab_json['data'].keys():
         if nodes['data'][node]['url'].split(':')[2] != '0' and nodes['data'][node]['name'] == node_search:
             tport = nodes['data'][node]['url'].split(':')[2]
