@@ -1,5 +1,5 @@
 requests==2.25.1
-urllib3==1.26.2
+urllib3==1.26.4
 subprocess-tee==0.2.0
 prettytable==2.0.0
 loguru==0.5.3
