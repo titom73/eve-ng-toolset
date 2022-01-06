@@ -73,7 +73,7 @@ def iterm_profile(lab_json):
             nodelist.append((name, type, tport, uuid))
 
     template = Template(ITERM2_PROFILE)
-    profile_name = args.lab.replace(' ','-')split('/')[-1]
+    profile_name = args.lab.replace(' ','-').split('/')[-1]
     render = template.render(nodes=sorted(
         nodelist), lab=profile_name, eve=args.server)
     rfile = f'{os.path.expanduser("~")}/{ITERM2_PATH}/{profile_name.replace(' ','-')}.json'
