@@ -76,7 +76,7 @@ def iterm_profile(lab_json):
     profile_name = args.lab.replace(' ','-')split('/')[-1]
     render = template.render(nodes=sorted(
         nodelist), lab=profile_name, eve=args.server)
-    rfile = f'{os.path.expanduser("~")}/{ITERM2_PATH}/{profile_name}.json'
+    rfile = f'{os.path.expanduser("~")}/{ITERM2_PATH}/{profile_name.replace(' ','-')}.json'
     print('Create iTerm2 dynamic profile at {}'.format(rfile))
     with open(rfile, 'w') as f:
         f.write(render)
