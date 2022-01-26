@@ -12,7 +12,7 @@ with open('requirements.txt') as f:
     required = f.read().splitlines()
 
 setup(
-    name="EVE-NG toolset",
+    name="eve-ng-toolset",
     version="{}".format(inetsixEve.__version__),
     python_requires=">=3.6",
     packages=['inetsixEve'],
